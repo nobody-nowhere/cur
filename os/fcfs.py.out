@@ -20,7 +20,7 @@ class Job:
             return True
         return False
     def calcValue(self, prev=None):
-        if prev is None:
+        if prev is None or self.arrivalTime > prev.completionTime:
             self.completionTime = self.burstTime + self.arrivalTime
         else:
             self.completionTime = self.burstTime + prev.completionTime

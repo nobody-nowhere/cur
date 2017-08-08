@@ -1,23 +1,22 @@
 #!/usr/bin/env python3
 
 from random import random
+import subprocess
+import os
 
 pidspace = []
 class Job:
     def __init__(self, PID):
         self.pid = PID
         print("Enter arrival time, burst time for pid {}:".format(self.pid))
-        self.arrivalTime = int(input())
-        self.burstTime = int(input())
+        self.burstTime = subprocess.Popen(['wc -w ' + PID], shell=True).stdout.read()
+        self.arrivalTime = int(os.stat(os.curdir).st_mtime)
         self.waitingTime = 0
         self.completionTime = 0
         self.turnaroundTime = 0
     def lesserThan(self, other):
         if self.arrivalTime == other.arrivalTime:
-            if self.burstTime == other.burstTime:
-                if self.pid < other.pid:
-                    return True
-            if self.burstTime < other.burstTime:
+            if self.pid < other.pid:
                 return True
         if self.arrivalTime < other.arrivalTime:
             return True
@@ -34,19 +33,27 @@ class Job:
 JOBS = []
 JOBQUEUE = []
 
-print("Number of jobs:")
-n = int(input())
+# Get list of files in current directory and generate that many process ids
+
+FILES = []
+# ignore the script itself
+for f in os.listdir():
+    if not f.endswith(".py") and not f.endswith(".out") and not f.endswith("makefile"):
+        FILES.append(f)
+        print(f)
+n = len(FILES)
+print("Number of files in directory = {}".format(n))
 
 # Populate the PID with n unique random numbers
-while len(pidspace) < n:
-    newPid = int(random() * 10000)
-    if pidspace.__contains__(newPid):
-        continue
-    else:
-        pidspace.append(newPid)
+# while pidspace.__len__() < n:
+#     newPid = int(random() * 10000)
+#     if pidspace.__contains__(newPid):
+#         continue
+#     else:
+#         pidspace.append(newPid)
 
-for pid in pidspace:
-    a = Job(pid)
+for file in FILES:
+    a = Job(file)
     JOBS.append(a)
 
 for i in range(len(JOBS)):
@@ -60,10 +67,8 @@ for i in range(len(JOBS)):
 
 totalWaitingTime = 0
 totalTurnaroundTime = 0
-
 print("\n\nPID\tBurstT\tArrivalT\tWaitingT\tCompletionT\tTurnaroundT")
 prevJob = None
-
 for job in JOBQUEUE:
     job.calcValue(prevJob)
     totalWaitingTime += job.waitingTime
@@ -71,7 +76,7 @@ for job in JOBQUEUE:
     print("{}\t{}\t{}\t\t{}\t\t{}\t\t{}".format(job.pid, job.burstTime, job.arrivalTime,
                                                 job.waitingTime, job.completionTime, job.turnaroundTime))
     prevJob = job
-print('''\nAll jobs completed in {}
-Average waiting time: {}
-Average turnaround time: {}
-'''.format(float(prevJob.completionTime), totalWaitingTime/n, totalTurnaroundTime/n))
+print('''All jobs completed in {}
+      Average waiting time: {}
+      Average turnaround time: {}
+      '''.format(prevJob.completionTime, totalWaitingTime/n, totalTurnaroundTime/n))
