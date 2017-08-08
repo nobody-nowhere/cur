@@ -31,15 +31,10 @@ class Job:
         self.turnaroundTime = self.completionTime - self.arrivalTime
         self.waitingTime = self.turnaroundTime - self.burstTime
 
-<<<<<<< HEAD
-JOBS = []
-JOBQUEUE = []
-=======
 CLOCK = 0
 JOBS = []
 JOBQUEUE = []
 WAITQUEUE = []
->>>>>>> 73ae78d1e8f2792b8700c342ed981b46bb52ddbe
 
 print("Number of jobs:")
 n = int(input())
@@ -73,15 +68,12 @@ prevJob = None
 
 for job in JOBQUEUE:
     job.calcValue(prevJob)
-<<<<<<< HEAD
-=======
     CLOCK += job.burstTime
     nextJob = None
     for possibleNextJob in JOBQUEUE:
         if possibleNextJob.arrivalTime < CLOCK:
             WAITQUEUE.append(possibleNextJob)
 
->>>>>>> 73ae78d1e8f2792b8700c342ed981b46bb52ddbe
     totalWaitingTime += job.waitingTime
     totalTurnaroundTime += job.turnaroundTime
     print("{}\t{}\t{}\t\t{}\t\t{}\t\t{}".format(job.pid, job.burstTime, job.arrivalTime,

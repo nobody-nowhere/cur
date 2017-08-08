@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
 from random import random
+from typing import List
 
-pidspace = []
+pidspace: List[int] = []
 class Job:
     def __init__(self, PID):
         self.pid = PID
@@ -12,6 +13,7 @@ class Job:
         self.waitingTime = 0
         self.completionTime = 0
         self.turnaroundTime = 0
+
     def lesserThan(self, other):
         if self.arrivalTime == other.arrivalTime:
             if self.burstTime == other.burstTime:
@@ -31,15 +33,10 @@ class Job:
         self.turnaroundTime = self.completionTime - self.arrivalTime
         self.waitingTime = self.turnaroundTime - self.burstTime
 
-<<<<<<< HEAD
-JOBS = []
-JOBQUEUE = []
-=======
 CLOCK = 0
 JOBS = []
 JOBQUEUE = []
-WAITQUEUE = []
->>>>>>> 73ae78d1e8f2792b8700c342ed981b46bb52ddbe
+WAITQUEUE: List[Job] = []
 
 print("Number of jobs:")
 n = int(input())
@@ -69,19 +66,17 @@ totalWaitingTime = 0
 totalTurnaroundTime = 0
 
 print("\n\nPID\tBurstT\tArrivalT\tWaitingT\tCompletionT\tTurnaroundT")
-prevJob = None
 
+curJob = JOBQUEUE[0]
 for job in JOBQUEUE:
-    job.calcValue(prevJob)
-<<<<<<< HEAD
-=======
-    CLOCK += job.burstTime
+    # job.calcValue(prevJob)
+    CLOCK += 1
     nextJob = None
-    for possibleNextJob in JOBQUEUE:
-        if possibleNextJob.arrivalTime < CLOCK:
-            WAITQUEUE.append(possibleNextJob)
+    # for possibleNextJob in JOBQUEUE:
+    #     if possibleNextJob.arrivalTime == CLOCK:
+    #         if possibleNextJob.burstTime < job.burstTime:
 
->>>>>>> 73ae78d1e8f2792b8700c342ed981b46bb52ddbe
+
     totalWaitingTime += job.waitingTime
     totalTurnaroundTime += job.turnaroundTime
     print("{}\t{}\t{}\t\t{}\t\t{}\t\t{}".format(job.pid, job.burstTime, job.arrivalTime,

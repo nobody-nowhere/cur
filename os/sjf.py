@@ -23,7 +23,7 @@ class Job:
             return True
         return False
     def calcValue(self, prev=None):
-        if prev is None:
+        if prev is None or self.arrivalTime > prev.completionTime:
             self.completionTime = self.burstTime + self.arrivalTime
         else:
             self.completionTime = self.burstTime + prev.completionTime
@@ -38,7 +38,7 @@ print("Number of jobs:")
 n = int(input())
 
 # Populate the PID with n unique random numbers
-while pidspace.__len__() < n:
+while len(pidspace) < n:
     newPid = int(random() * 10000)
     if pidspace.__contains__(newPid):
         continue
@@ -60,8 +60,10 @@ for i in range(len(JOBS)):
 
 totalWaitingTime = 0
 totalTurnaroundTime = 0
+
 print("\n\nPID\tBurstT\tArrivalT\tWaitingT\tCompletionT\tTurnaroundT")
 prevJob = None
+
 for job in JOBQUEUE:
     job.calcValue(prevJob)
     totalWaitingTime += job.waitingTime
